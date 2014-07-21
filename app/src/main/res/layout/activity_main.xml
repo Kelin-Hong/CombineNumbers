@@ -9,6 +9,26 @@
     android:background="@android:color/white"
     tools:context=".MyActivity">
 
+    <TextView
+        android:id="@+id/passIndex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Goal "
+        android:textSize="40sp"
+        android:textColor="@android:color/holo_blue_light"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:id="@+id/goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/passIndex"
+        android:textSize="30sp"
+        android:textColor="@android:color/holo_blue_light"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"/>
     <FrameLayout
         android:id="@+id/layout_content"
         android:layout_width="wrap_content"
