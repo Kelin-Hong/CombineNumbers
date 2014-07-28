@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.project.kelin.combinenumbers" >
+    package="com.project.kelin.combinenumbers">
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,6 +18,51 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".AnswerActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"></activity>
+
+        <!-- 芒果自动配置所需Activity -->
+        <activity android:name="net.cavas.show.MainLoadCavasActivity"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
+        <activity
+            android:name="net.cavas.show.MainLoadCavasDetailActivity"
+            android:configChanges="orientation|keyboardHidden" >
+        </activity>
+
+        <!-- 注册Service，应用下载所需 -->
+        <service android:name="net.cavas.show.MonitorService" >
+        </service>
+        <!-- 多盟积分墙v1.1.1 (开始) -->
+        <activity android:name="cn.domob.download.OActivity"></activity>
+        <!-- 多盟积分墙v1.1.1 (结束) -->
     </application>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+
+
+
+    <!-- 添加用户权限 -->
+    <!-- 连接网络权限INTERNET ，用于请求积分墙(必须) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 读取手机基本信息权限READ_PHONE_STATE，用于精确统计用户的机型等信息(必须) -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 读取网络信息权限ACCESS_NETWORK_STATE，用于识别gprs网络的接入点的情况(必须) -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 获取用户地理信息权限，用于帮助精确统计开发者的程序发布之后的用户分布情况 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <!-- 获取当前wifi的状态及读取mac地址所需 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 读写sd 卡的权限，用于缓存广告所用到的图片，节省流量，并可获得更好的用户体验 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 创建和删除桌面快捷方式-->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <!-- 允许应用写入(并不能读)用户的浏览记录和书签-->
+    <uses-permission android:name="com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" />
+    <!-- 在SDCard中创建与删除文件-->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+
 </manifest>

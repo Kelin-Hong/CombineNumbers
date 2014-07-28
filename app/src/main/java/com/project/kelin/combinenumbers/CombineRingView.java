@@ -114,7 +114,7 @@ public class CombineRingView extends View {
     public CombineRingView(Context context, int passIndex) {
         super(context);
         DataConstants.sPassIndex = passIndex;
-        DataConstants.initData();
+        DataConstants.initData(context);
         mData = DataConstants.sProjectionArray;
         mRow = mData.length;
         mColumn = mData[0].length;

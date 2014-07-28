@@ -13,7 +13,8 @@ public class CombineUtils {
         //定义二维数组m[i][j]来记录i到j的合并过成中最少石子数目
         //此处赋值为-1
 
-        int m[][] = new int[100][100];
+        int m[][] = new int[n+1][n+1];
+        int path[][] = new int[n+1][n+1];
         for (int x = 1; x <= n; x++)
             for (int z = 1; z <= n; z++) {
                 m[x][z] = -1;
@@ -43,29 +44,38 @@ public class CombineUtils {
                 //要与下面的情况相比较，唉，太详细了
 
                 m[i][j] = m[i + 1][j] + sum;
-
+                path[i][j]=i;
                 //除上面一种组合情况外的其他组合情况
                 for (int k = i + 1; k < j; k++) {
                     int t = m[i][k] + m[k + 1][j] + sum;
-                    if (t > m[i][j])
+                    if (t > m[i][j]) {
+                        path[i][j] = k;
                         m[i][j] = t;
+                    }
 
                 }
             }
         //最终得到最优解
         max = m[1][n];
+        if(max>sMax){
+            sPath=path;
+            //pathNumber=p;
+        }
         return max;
-
-
     }
-
+    public static int sMax=0;
+    public static int sNumberCount;
+    public static int[][] sPath;
+    public static int[] pathNumber;
     public static int getMaxScore(int[] stone) {
         int max = 0;
         int n = stone.length-1;
-
-        for (int i = 1; i <= n; i++)
-            max = MatrixChain_max(stone, n);
-
+        sNumberCount=n;
+        sPath=new int[n+1][n+1];
+         sMax=0;
+         max = MatrixChain_max(stone, n);
+         sMax=max;
+         pathNumber=stone.clone();
         //因为题目要求圆的原因，要把所有情况都要考虑到，总共有n种情况。
         for (int j = 1; j <= n - 1; j++) {
             int max_cache = 0;
@@ -75,9 +85,33 @@ public class CombineUtils {
             }
             stone[n] = cache;
             max_cache = MatrixChain_max(stone, n);
-            if (max_cache > max)
+            if (max_cache > max) {
                 max = max_cache;
+                pathNumber=stone.clone();
+            }
+            sMax=max;
         }
         return max;
+    }
+    public static int[] getPathArray(){
+        int n=0,k=sNumberCount,p=1,q=sNumberCount;
+        int a[]=new int[sNumberCount+1];
+        k=sPath[p][q];
+        while (true){
+            if(q-p<=1) {
+                a[++n]=q;
+                a[++n]=p;
+                break;
+            }
+            if(k+1==q){
+                a[++n]=q;
+                q=k;
+            }else if(p==k){
+                a[++n]=p;
+                p=k+1;
+            }
+            k=sPath[p][q];
+        }
+        return a;
     }
 }
