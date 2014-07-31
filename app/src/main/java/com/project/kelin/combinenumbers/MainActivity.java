@@ -63,15 +63,15 @@ public class MainActivity extends Activity implements CombineRingView.OnGameOver
         mCombineRingView.setOnGameOverListener(MainActivity.this);
 
 
-        MogoOffer.init(this, "8f95d4d4a10049c3b7dadc923bef8c50");
+        MogoOffer.init(this,"8f95d4d4a10049c3b7dadc923bef8c50");
 
        //设置顺序展示模式下，选择积分墙入口的弹出框标题；
-        MogoOffer.setOfferListTitle("获取积分");
-        MogoOffer.setOfferEntranceMsg("商城");
-
-        MogoOffer.setMogoOfferScoreVisible(false);
-
-        MogoOffer.setMogoOfferListCallback(this);
+//        MogoOffer.setOfferListTitle("获取积分");
+//        MogoOffer.setOfferEntranceMsg("商城");
+//
+//        MogoOffer.setMogoOfferScoreVisible(false);
+//
+//        MogoOffer.setMogoOfferListCallback(this);
         MogoOffer.addPointCallBack(this);
     }
     @Override
@@ -83,6 +83,7 @@ public class MainActivity extends Activity implements CombineRingView.OnGameOver
     @Override
     protected void onDestroy() {
         MogoOffer.clear(this);
+        //PrMogoLayout.clear();
         super.onDestroy();
     }
     private void dealWithSuccess() {
@@ -241,7 +242,7 @@ public class MainActivity extends Activity implements CombineRingView.OnGameOver
                 {
                     dialog.dismiss();
                 }
-
+                //MogoOffer.mogoOffersManager.showOffers();
                 MogoOffer.showSingleOffer(context, which);
             }
         });

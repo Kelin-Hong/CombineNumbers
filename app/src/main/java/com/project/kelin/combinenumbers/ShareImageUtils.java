@@ -26,7 +26,7 @@ import java.io.FileOutputStream;
  * Created by kelin on 14-7-21.
  */
 public class ShareImageUtils {
-    private final static String APP_ID = "";
+    private final static String APP_ID = "wxa924f725a38c6d74";
     private final static String SAVE_PATH = getSDCardPath() + "/ScreenImages/";
     private final static String IMAGE_FORMAT_POSTFIX = ".png";
     private final static String SHARE_TITLE = "一步都不能错";

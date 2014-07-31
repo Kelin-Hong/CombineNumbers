@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="AdsMOGO_Android_SDK_1.4.9">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/AdsMOGO_Android_SDK_1.4.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

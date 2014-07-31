@@ -22,9 +22,13 @@
             android:name=".AnswerActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"></activity>
 
-        <!-- 芒果自动配置所需Activity -->
-        <activity android:name="net.cavas.show.MainLoadCavasActivity"
-            android:configChanges="orientation|keyboardHidden">
+
+
+
+        <!-- MOGO自动配置积分墙 （开始） -->
+        <activity
+            android:name="net.cavas.show.MainLoadCavasActivity"
+            android:configChanges="orientation|keyboardHidden" >
         </activity>
         <activity
             android:name="net.cavas.show.MainLoadCavasDetailActivity"
@@ -34,9 +38,48 @@
         <!-- 注册Service，应用下载所需 -->
         <service android:name="net.cavas.show.MonitorService" >
         </service>
+
+        <!-- MOGO自动配置积分墙 （结束） -->
+        <!--芒果 Banner 开始-->
+        <activity
+            android:name="com.project.kelin.adsdk.av.AdsdkWebView"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name">
+        </activity>
+        <!-- 注册Service，自主广告与交换广告的应用下载功能所需 -->
+
+        <service android:name="com.project.kelin.adsdk.controller.service.UpdateService"
+
+            android:exported="true"
+
+            android:process=":remote" />
+
+        <!-- 注册Service，安装应用所用 -->
+
+        <service android:name="com.project.kelin.adsdk.controller.service.CountService"
+
+            android:exported="true"
+
+            android:process=":remote" />
+
+        <!--芒果 Banner 结束-->
+
         <!-- 多盟积分墙v1.1.1 (开始) -->
         <activity android:name="cn.domob.download.OActivity"></activity>
         <!-- 多盟积分墙v1.1.1 (结束) -->
+
+        <!-- 点乐3.0.5 (开始) -->
+        <activity
+            android:name="com.dlnetwork.DianleOfferActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <service android:name="com.dlnetwork.DianleOfferHelpService" />
+        <!-- 渠道 修改 value -->
+        <meta-data
+            android:name="com.dlnetwork.cid"
+            android:value="default_cid" />
+        <!-- 点乐3.0.5 (结束) -->
     </application>
 
 
@@ -64,5 +107,10 @@
     <uses-permission android:name="com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" />
     <!-- 在SDCard中创建与删除文件-->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!--点乐所需权限-->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!--多盟所需权限,无此权限多盟将无法展示广告-->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
 </manifest>
