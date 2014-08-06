@@ -24,9 +24,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'org.roboguice:roboguice:2.+'
     compile files('libs/libammsdk.jar')
-    compile files('libs/AdsMOGO_Offer_Android_SDK_1.0.8.jar')
-    compile files('libs/DomobWwallSdk_v1.1.1.jar')
     compile files('libs/AdsMOGO_Android_SDK_1.4.9.jar')
     compile files('libs/Baidu_MobAds_SDK_Agg_3.44.jar')
-    compile files('libs/DianLeWallSDK_v3.0.5.jar')
+    compile files('libs/YoumiSdk_v4.09_2014-07-10.jar')
 }

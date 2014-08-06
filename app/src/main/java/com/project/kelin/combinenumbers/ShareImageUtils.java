@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,8 +31,10 @@ public class ShareImageUtils {
     private final static String SAVE_PATH = getSDCardPath() + "/ScreenImages/";
     private final static String IMAGE_FORMAT_POSTFIX = ".png";
     private final static String SHARE_TITLE = "一步都不能错";
-    private final static String SHARE_CONTENT ="IQ挑战！一般人只能玩到第4关，我玩到了%d关，你也来试试";
-    private final static String SHARE_DOWNLOAD_URL = "http://kelin.qiniudn.com/app-debug-unaligned.apk";
+    private final static String WX_SHARE_TITLE = "我竟然玩到了第%1$d关,一般人只能玩到第3关,挑战你的智商的数字合并游戏！你也来试试";
+    private final static String SHARE_CONTENT = "我竟然玩到了第%1$d关,一般人只能玩到第3关,挑战你的智商的数字合并游戏！你也来试试[一步都不能错]";
+    private final static String SHARE_DOWNLOAD_URL = "http://share.weiyun.com/34784165f1273516be46a531982700da";
+    private static IWXAPI api;
 
     /**
      * 获取和保存当前屏幕的截图
@@ -72,16 +75,18 @@ public class ShareImageUtils {
             e.printStackTrace();
         }
     }
-    static int px[]={36,48,72,96};
-    public static void saveIconImage(Activity context, String fileName,View iconView) {
+
+    static int px[] = {36, 48, 72, 96};
+
+    public static void saveIconImage(Activity context, String fileName, View iconView) {
         Bitmap bitmap = getBitmapFromView(iconView);
-        for(int i=0;i<4;i++) {
-         //Bitmap bitmap = Bitmap.createScaledBitmap(bap, px[i], px[i], true);
+        for (int i = 0; i < 4; i++) {
+            //Bitmap bitmap = Bitmap.createScaledBitmap(bap, px[i], px[i], true);
 //        Canvas canvas = new Canvas(bitmap1);
 //        canvas.drawBitmap(bitmap2, location2[0] - location1[0], location2[1] - location1[1], new Paint());
             try {
                 File path = new File(SAVE_PATH);
-                String filepath = SAVE_PATH + fileName+"_"+px[i] + IMAGE_FORMAT_POSTFIX;
+                String filepath = SAVE_PATH + fileName + "_" + px[i] + IMAGE_FORMAT_POSTFIX;
                 if (!path.exists()) {
                     path.mkdirs();
                 }
@@ -110,9 +115,65 @@ public class ShareImageUtils {
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
         v.buildDrawingCache(true);
-        Bitmap b = Bitmap.createBitmap(v.getDrawingCache(),0,0,v.getMeasuredWidth(),v.getMeasuredHeight());
+        Bitmap b = Bitmap.createBitmap(v.getDrawingCache(), 0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
         v.setDrawingCacheEnabled(false);
         return b;
+    }
+
+    /**
+     * 删除文件夹以及目录下的文件
+     *
+     * @param filePath 被删除目录的文件路径
+     * @return 目录删除成功返回true，否则返回false
+     */
+    public static boolean deleteDirectory(String filePath) {
+        boolean flag = false;
+        //如果filePath不以文件分隔符结尾，自动添加文件分隔符
+        if (!filePath.endsWith(File.separator)) {
+            filePath = filePath + File.separator;
+        }
+        File dirFile = new File(filePath);
+        if (!dirFile.exists() || !dirFile.isDirectory()) {
+            return false;
+        }
+        flag = true;
+        File[] files = dirFile.listFiles();
+        //遍历删除文件夹下的所有文件(包括子目录)
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].isFile()) {
+                //删除子文件
+                flag = deleteFile(files[i].getAbsolutePath());
+                if (!flag) break;
+            } else {
+                //删除子目录
+                flag = deleteDirectory(files[i].getAbsolutePath());
+                if (!flag) break;
+            }
+        }
+        if (!flag) return false;
+        //删除当前空目录
+        return dirFile.delete();
+    }
+
+    /**
+     * 删除单个文件
+     *
+     * @param filePath 被删除文件的文件名
+     * @return 文件删除成功返回true，否则返回false
+     */
+    public static boolean deleteFile(String filePath) {
+        File file = new File(filePath);
+        if (file.isFile() && file.exists()) {
+            return file.delete();
+        }
+        return false;
+    }
+
+    /**
+     * 删除没用的屏幕的截图文件夹
+     */
+    public static void deleteImageFolder(Activity context) {
+        deleteDirectory(SAVE_PATH);
     }
 
     /**
@@ -164,22 +225,23 @@ public class ShareImageUtils {
             }
         }
         intent.putExtra(Intent.EXTRA_SUBJECT, SHARE_TITLE);
-        intent.putExtra(Intent.EXTRA_TEXT, String.format(SHARE_CONTENT,DataConstants.sPassIndex)+","+SHARE_DOWNLOAD_URL);
+        intent.putExtra(Intent.EXTRA_TEXT, String.format(SHARE_CONTENT, DataConstants.sPassIndex) + SHARE_DOWNLOAD_URL);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(Intent.createChooser(intent, "Share"));
     }
 
     public static void shareToWX(Context context, String imageName) {
         String imagePath = SAVE_PATH + imageName + IMAGE_FORMAT_POSTFIX;
-        IWXAPI api = WXAPIFactory.createWXAPI(context, APP_ID, false);
+        api = WXAPIFactory.createWXAPI(context, APP_ID, false);
         api.registerApp(APP_ID);
         WXWebpageObject webpage = new WXWebpageObject();
         webpage.webpageUrl = SHARE_DOWNLOAD_URL;
         WXMediaMessage msg = new WXMediaMessage(webpage);
-        msg.title = SHARE_TITLE;
-        msg.description = SHARE_CONTENT;
+        msg.title = String.format(WX_SHARE_TITLE, DataConstants.sPassIndex);
+        msg.description = String.format(WX_SHARE_TITLE, DataConstants.sPassIndex);
         try {
-            Bitmap bmp = BitmapFactory.decodeFile(imagePath);
+            Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
+            //Bitmap bmp = BitmapFactory.decodeFile(imagePath);
             Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 150, 150, true);
             bmp.recycle();
             msg.setThumbImage(thumbBmp);
@@ -191,6 +253,5 @@ public class ShareImageUtils {
         req.message = msg;
         req.scene = SendMessageToWX.Req.WXSceneTimeline;
         api.sendReq(req);
-        deleteImage((Activity)context,imageName);
     }
 }

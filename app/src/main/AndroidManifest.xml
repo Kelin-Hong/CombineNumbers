@@ -1,89 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.project.kelin.combinenumbers">
+    package="com.project.kelin.combinenumbers" >
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"></activity>
         <activity
             android:name=".AnswerActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"></activity>
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" />
 
-
-
-
-        <!-- MOGO自动配置积分墙 （开始） -->
-        <activity
-            android:name="net.cavas.show.MainLoadCavasActivity"
-            android:configChanges="orientation|keyboardHidden" >
-        </activity>
-        <activity
-            android:name="net.cavas.show.MainLoadCavasDetailActivity"
-            android:configChanges="orientation|keyboardHidden" >
-        </activity>
-
-        <!-- 注册Service，应用下载所需 -->
-        <service android:name="net.cavas.show.MonitorService" >
-        </service>
-
-        <!-- MOGO自动配置积分墙 （结束） -->
-        <!--芒果 Banner 开始-->
+        <!-- 芒果 Banner 开始 -->
         <activity
             android:name="com.project.kelin.adsdk.av.AdsdkWebView"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name" />
         <!-- 注册Service，自主广告与交换广告的应用下载功能所需 -->
 
-        <service android:name="com.project.kelin.adsdk.controller.service.UpdateService"
-
+        <service
+            android:name="com.project.kelin.adsdk.controller.service.UpdateService"
             android:exported="true"
-
             android:process=":remote" />
 
         <!-- 注册Service，安装应用所用 -->
 
-        <service android:name="com.project.kelin.adsdk.controller.service.CountService"
-
+        <service
+            android:name="com.project.kelin.adsdk.controller.service.CountService"
             android:exported="true"
-
             android:process=":remote" />
 
-        <!--芒果 Banner 结束-->
-
-        <!-- 多盟积分墙v1.1.1 (开始) -->
-        <activity android:name="cn.domob.download.OActivity"></activity>
-        <!-- 多盟积分墙v1.1.1 (结束) -->
-
-        <!-- 点乐3.0.5 (开始) -->
+        <!-- 芒果 Banner 结束 -->
         <activity
-            android:name="com.dlnetwork.DianleOfferActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:name=".LaunchActivity"
+            android:label="@string/title_activity_launch" >
+        </activity>
 
-        <service android:name="com.dlnetwork.DianleOfferHelpService" />
-        <!-- 渠道 修改 value -->
-        <meta-data
-            android:name="com.dlnetwork.cid"
-            android:value="default_cid" />
-        <!-- 点乐3.0.5 (结束) -->
+        <!-- 有米传媒 Android SDK 配置(可直接复制节点) -->
+        <!-- SDK 必须配置 -->
+        <activity
+            android:name="net.youmi.android.AdBrowser"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+
+        <service
+            android:name="net.youmi.android.AdService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name="net.youmi.android.AdReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <!-- /SDK 必须配置 -->
+
+
+        <!-- 添加百度应用详情Activity -->
+        <!-- 注册AppActivity -->
+        <activity
+            android:name="com.baidu.mobads.AppActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation" />
+
     </application>
-
-
-
 
     <!-- 添加用户权限 -->
     <!-- 连接网络权限INTERNET ，用于请求积分墙(必须) -->
@@ -101,16 +98,11 @@
     <!-- 读写sd 卡的权限，用于缓存广告所用到的图片，节省流量，并可获得更好的用户体验 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!-- 创建和删除桌面快捷方式-->
+    <!-- 创建和删除桌面快捷方式 -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-    <!-- 允许应用写入(并不能读)用户的浏览记录和书签-->
+    <!-- 允许应用写入(并不能读)用户的浏览记录和书签 -->
     <uses-permission android:name="com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" />
-    <!-- 在SDCard中创建与删除文件-->
+    <!-- 在SDCard中创建与删除文件 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <!--点乐所需权限-->
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!--多盟所需权限,无此权限多盟将无法展示广告-->
-    <uses-permission android:name="android.permission.VIBRATE" />
 
 </manifest>

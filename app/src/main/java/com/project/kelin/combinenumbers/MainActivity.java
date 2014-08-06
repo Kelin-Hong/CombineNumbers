@@ -3,40 +3,34 @@ package com.project.kelin.combinenumbers;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.adsmogo.offers.MogoOffer;
-import com.adsmogo.offers.MogoOfferChooserAdapter;
-import com.adsmogo.offers.MogoOfferListCallback;
-import com.adsmogo.offers.MogoOfferPointCallBack;
+import com.project.kelin.adsdk.itl.AdsdkInterstitialManager;
 
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Random;
 
 
-public class MainActivity extends Activity implements CombineRingView.OnGameOverListener,MogoOfferPointCallBack,MogoOfferListCallback {
+public class MainActivity extends Activity implements CombineRingView.OnGameOverListener {
+    private final static String mogoID="8f95d4d4a10049c3b7dadc923bef8c50";
     FrameLayout mContentLayout;
     TextView mGoalTextView;
     TextView mPassIndexTextView;
+    TextView mShareTipTextView;
     CombineRingView mCombineRingView;
+    private Dialog mShareDialog;
     private String mCurrentImageName;
     private int mGoalScore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,39 +45,38 @@ public class MainActivity extends Activity implements CombineRingView.OnGameOver
         mGoalTextView.setTextSize(20f);
         mGoalScore=CombineUtils.getMaxScore(DataConstants.sNumbers);
         mGoalTextView.setText(String.format(getResources().getString(R.string.goal_score),mGoalScore));
-//        mGoalTextView.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mGoalTextView.setTextSize(30f);
-//                mGoalTextView.setText("目标分数 "+CombineUtils.getMaxScore(DataConstants.sNumbers));
-//
-//            }
-//        },60000);
         mContentLayout.addView(mCombineRingView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mCombineRingView.setOnGameOverListener(MainActivity.this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.view_share, null);
+        mShareTipTextView=(TextView)dialogView.findViewById(R.id.share_tips);
+        mShareTipTextView.setVisibility(View.GONE);
+        mShareDialog = new AlertDialog.Builder(this).setView(dialogView).create();
+        mShareDialog.setCanceledOnTouchOutside(false);
+        initInterstitial();
+    }
 
-
-        MogoOffer.init(this,"8f95d4d4a10049c3b7dadc923bef8c50");
-
-       //设置顺序展示模式下，选择积分墙入口的弹出框标题；
-//        MogoOffer.setOfferListTitle("获取积分");
-//        MogoOffer.setOfferEntranceMsg("商城");
-//
-//        MogoOffer.setMogoOfferScoreVisible(false);
-//
-//        MogoOffer.setMogoOfferListCallback(this);
-        MogoOffer.addPointCallBack(this);
+    /**
+     * 初始化全插屏对象
+     * 初始化之前必须设置默认的AppKey和Activity
+     */
+    public void initInterstitial() {
+        //设置当前Activity对象
+        AdsdkInterstitialManager.setInitActivity(this);
+        //初始化(必须先设置默认的Activity对象才能通过此方法初始化SDK)
+        AdsdkInterstitialManager.shareInstance().adsMogoInterstitialByAppKey(mogoID);
+        //设置 回调
+        AdsdkInterstitialManager.shareInstance().adsMogoInterstitialByAppKey(mogoID);//.setAdsdkInterstitialListener(adsMogoInterstitialListener);
     }
     @Override
     protected void onResume() {
-        MogoOffer.RefreshPoints(this);
         super.onResume();
+        changeCurrentActivity();
     }
 
     @Override
     protected void onDestroy() {
-        MogoOffer.clear(this);
-        //PrMogoLayout.clear();
+
         super.onDestroy();
     }
     private void dealWithSuccess() {
@@ -104,20 +97,28 @@ public class MainActivity extends Activity implements CombineRingView.OnGameOver
         nextPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Random random=new Random();
+                int n=random.nextInt(4);
+                Log.v("random numbser---------------------->",n+"");
+                if(n==1) {
+                    showInterstitial();
+                }
                 mGoalTextView.setTextSize(30f);
                 mPassIndexTextView.setTextSize(40f);
                 gamePass();
                 dialog.cancel();
-                ShareImageUtils.deleteImage(MainActivity.this,mCurrentImageName);
+                //ShareImageUtils.deleteImage(MainActivity.this,mCurrentImageName);
             }
         });
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mGoalTextView.setTextSize(30f);
+                mPassIndexTextView.setTextSize(40f);
                 dialog.cancel();
-                dealWithShare();
+                mShareTipTextView.setVisibility(View.GONE);
+                mShareDialog.show();
                 gamePass();
-
             }
         });
 
@@ -141,11 +142,10 @@ public class MainActivity extends Activity implements CombineRingView.OnGameOver
         getAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                 dealWithShare();
+                mShareTipTextView.setVisibility(View.VISIBLE);
+                mShareDialog.show();
 //                Intent intent = new Intent(MainActivity.this, AnswerActivity.class);
 //                startActivity(intent);
-                MogoOffer.showOffer(MainActivity.this);
                 dialog.cancel();
                 gameAgain();
 
@@ -154,9 +154,15 @@ public class MainActivity extends Activity implements CombineRingView.OnGameOver
         again.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Random random=new Random();
+                int n=random.nextInt(4);
+                Log.v("random numbser---------------------->",n+"");
+                if(n==1) {
+                    showInterstitial();
+                }
                 gameAgain();
                 dialog.cancel();
-                ShareImageUtils.deleteImage(MainActivity.this,mCurrentImageName);
+                //ShareImageUtils.deleteImage(MainActivity.this,mCurrentImageName);
             }
         });
 
@@ -177,20 +183,18 @@ public class MainActivity extends Activity implements CombineRingView.OnGameOver
     }
     public void onOtherShareClick(View view){
         ShareImageUtils.starSystemShare(MainActivity.this, mCurrentImageName);
+        mShareDialog.dismiss();
     }
     public void onWXShareClick(View view){
         ShareImageUtils.shareToWX(this,mCurrentImageName);
-    }
-    private void dealWithShare(){
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.view_share, null);
-        final Dialog dialog = new AlertDialog.Builder(this).setView(dialogView).create();
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+        mShareDialog.dismiss();
+
     }
 
     @Override
     public void onGameOver(int score) {
+
+
         if (score >= CombineUtils.getMaxScore(DataConstants.sNumbers.clone())) {
             dealWithSuccess();
         } else {
@@ -199,56 +203,43 @@ public class MainActivity extends Activity implements CombineRingView.OnGameOver
     }
 
     @Override
-    public void updatePoint(long l) {
-
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
         if(KeyEvent.KEYCODE_BACK == keyCode){
+            ShareImageUtils.deleteImageFolder(this);
             MainActivity.this.finish();
             System.exit(0);
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
+    /**
+     * 改变当前栈顶的Activity对象
+     * 如果当前栈顶Activit发生变化,如果未调用该方法改变Activit对象, * 有可能会导致广告无法展示或者崩溃
+     */
+    public void changeCurrentActivity() {
+        AdsdkInterstitialManager.shareInstance().adsMogoInterstitialByAppKey(mogoID).changeCurrentActivity(this);
+    }
+    public void showInterstitial() {
+        AdsdkInterstitialManager.shareInstance().adsMogoInterstitialByAppKey(mogoID).interstitialShow(true);
+    }
 
+    /**
+     * 改变当前栈顶的Activity对象
+     * 如果当前栈顶Activit发生变化，如果未调用该方法改变Activit对象，
+     * 有可能会导致广告无法展示或者崩溃
+     */
     @Override
-    public void showOfferListDialog(final Context context, String dialogTitle, String[] tips)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
 
-        final AlertDialog dialog = new AlertDialog.Builder(context).create();
+        if (AdsdkInterstitialManager.shareInstance()
+                .containDefaultInterstitia()) {
+            AdsdkInterstitialManager.shareInstance().defaultInterstitial()
+                    .changeCurrentActivity(this);
 
-        MogoOfferChooserAdapter adapter = new MogoOfferChooserAdapter(context, tips);
-
-        dialog.setTitle(dialogTitle);
-
-        ListView listView = new ListView(context);
-        listView.setBackgroundColor(0xffffffff);
-        listView.setPadding(0, 0, 0, 0);
-        listView.setCacheColorHint(0x00000000);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int which, long arg3)
-            {
-                // TODO Auto-generated method stub
-
-                if (dialog != null)
-                {
-                    dialog.dismiss();
-                }
-                //MogoOffer.mogoOffersManager.showOffers();
-                MogoOffer.showSingleOffer(context, which);
-            }
-        });
-        dialog.setView(listView);
-        //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.show();
+        }
 
     }
 }

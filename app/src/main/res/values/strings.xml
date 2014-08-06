@@ -17,41 +17,49 @@
     <string name="answer">合并方法</string>
     <string name="answer_step">第%1$d步：%2$d + %3$d = %4$d 总分:%5$d +%6$d = %7$d</string>
     <string name="get_answer">获取答案</string>
+    <string name="errcode_success">发送成功</string>
+    <string name="errcode_cancel">发送取消</string>
+    <string name="errcode_deny">发送被拒绝</string>
+    <string name="errcode_unknown">发送返回</string>
+    <string name="wx_share_get_answer">微信分享可以获取答案哦Y(^_^)Y</string>
+
     <string-array name="failure_message_array">
-        <item>作者不想打击你！再试试吧，有技巧的！！！少年 ~_~</item>
-        <item>作者还是不想打击你！再试试吧，有技巧的！！！少年~_~</item>
-        <item>加油！这一关其实不难！！！</item>
-        <item>别泄气，大家这关都过不了！</item>
+        <item>作者不想打击你，再试试吧，有技巧的！！！少年(^_^) </item>
+        <item>作者还是不想打击你，再试试吧，有技巧的！！！少年 (*^_^*)</item>
+        <item>加油！这一关其实不难！！！^_^</item>
+        <item>别泄气，大家这关都过不了！(*^_^*)</item>
         <item>多试试，肯定能行，^_^</item>
-        <item>其实，你已经很强了！</item>
-        <item>奋发！奋发！奋发！奋发！</item>
+        <item>其实，你已经很强了！(☆_☆)</item>
+        <item>奋发！奋发！奋发！奋发！凸^-^凸</item>
         <item>倒数第三关，你敢信！！</item>
         <item>倒数第二关，你敢信！！</item>
         <item>只差最后一步了，好可惜！！~_~</item>
     </string-array>
     <string-array name="success_message_array">
-        <item>恭喜入门了！赶紧下一关吧！！！少年 ^_^ </item>
-        <item>恭喜！！智商80了，你在正常人智商水平的路上一去不复返了。。。(*^_^*)</item>
-        <item>恭喜成为一个正常人，智商90！！！！加油下一关！</item>
-        <item>作者说了一般人都过不了这一关,你已经不是正常人了！！！Y(^_^)Y</item>
+        <item>恭喜入门了！赶紧下一关吧！少年 ^_^ </item>
+        <item>恭喜！智商80了，你在正常人智商水平的路上一去不复返了(*^_^*)</item>
+        <item>恭喜成为一个正常人，智商90了！加油下一关！$_$</item>
+        <item>作者说了一般人都过不了这一关,你已经不是正常人了！Y(^_^)Y</item>
         <item>你的智商正在暴走！！！！！</item>
-        <item>你的智商暴走持续中。。。</item>
+        <item>你的智商暴走持续中！！！！！</item>
         <item>好吧！！！爱因斯坦给你跪了！</item>
-        <item>你已经在神的路上一去不复返了！！！</item>
+        <item>你已经在不是人的路上一去不复返了！！！</item>
         <item>作者表示你已经不是人了！！！</item>
-        <item>吓尿了！神你是怎么做到的，！！！作者给你跪了！！！</item>
+        <item>吓尿了！你是怎么做到的，！！！作者给你跪了！！！</item>
     </string-array>
     <string-array name="game_data">
         <item>{0, 4, 4, 9, 5}</item>
         <item>{0, 4, 3, 4, 5, 7}</item>
-        <item>{0, 7, 5, 4, 6, 8, 3}</item>
+        <item>{0, 8, 5, 4, 6, 8, 3}</item>
         <item>{0, 12, 13, 10, 16, 12, 12, 9, 14}</item>
         <item>{0, 15, 13, 18, 22, 20, 12, 19, 24, 9, 30}</item>
         <item>{0, 23, 23, 28, 32, 30, 22, 29, 28, 29, 30}</item>
-        <item>{0, 33, 23, 48, 32, 50, 22, 39, 28, 39, 40, 43}</item>
-        <item>{0, 53, 43, 68, 52, 47, 42, 39, 28, 59, 30, 39, 30}</item>
+        <item>{0, 33, 43, 28, 32, 50, 22, 39, 28, 39, 30, 43}</item>
+        <item>{0, 53, 43, 38, 52, 47, 42, 39, 28, 59, 30, 59, 30}</item>
         <item>{0, 56, 53, 68, 42, 30, 72, 29, 48, 49, 50, 40, 60, 23, 44}</item>
-        <item>{0, 53, 63, 68, 32, 70, 22, 69, 58, 49, 30, 80, 32, 100, 43, 60, 74}</item>
+        <item>{0, 43, 63, 68, 32, 70, 22, 69, 58, 49, 30, 80, 32, 100, 43, 60, 74}</item>
     </string-array>
+
+    <string name="title_activity_launch">LaunchActivity</string>
 
 </resources>
